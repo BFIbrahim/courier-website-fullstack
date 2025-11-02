@@ -1,5 +1,6 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 
+@import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default
 }
@@ -8,8 +9,23 @@
   name: "goFast_Theme";
   default: true;
 
-  --color-primary: #CAEB66; 
-  --color-secondary: #03373D; 
-  --color-accent: #606060; 
+  --color-primary: #CAEB66;
+  --color-secondary: #03373D;
+  --color-accent: #606060;
+  --color-gray-900: #0B0B0B;
 
+}
+
+a.active {
+  text-decoration: underline;
+  text-decoration-color: #CAEB66;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px; 
+}
+
+.font-urbanist {
+  font-family: "Urbanist", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
 }
