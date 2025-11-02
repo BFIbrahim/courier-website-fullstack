@@ -3,3 +3,13 @@
 @plugin "daisyui" {
   themes: light --default
 }
+
+@plugin "daisyui/theme" {
+  name: "goFast_Theme";
+  default: true;
+
+  --color-primary: #CAEB66; 
+  --color-secondary: #03373D; 
+  --color-accent: #606060; 
+
+}
