@@ -1,0 +1,39 @@
+/* Testimonials.css */
+.testimonial-card {
+  background: #f0f0f0;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.5;
+  transform: scale(0.9);
+  
+}
+
+.swiper-slide-active .testimonial-card {
+  background: #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  opacity: 1;
+  transform: scale(1.05);
+}
+.custom-prev, .custom-next {
+  transition: all 0.3s ease;
+}
+
+.custom-prev:hover, .custom-next:hover {
+  transform: scale(1.1);
+}
+ 
+
+.custom-prev, .custom-next {
+  transition: all 0.3s ease;
+}
+
+.custom-prev:hover, .custom-next:hover {
+  transform: scale(1.1);
+}
+
+.swiper,
+.swiper-wrapper {
+  overflow: visible !important;
+}

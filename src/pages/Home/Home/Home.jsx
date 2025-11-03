@@ -5,6 +5,7 @@ import Services from '../Services/Services'
 import OurClients from '../OurClients/OurClients'
 import Features from '../Features/Features'
 import BeMarchant from '../BeMarchant/BeMarchant'
+import TestimonialsSwiper from '../Testimonials/Testimonial'
 
 const Home = () => {
   return (
@@ -15,6 +16,7 @@ const Home = () => {
         <OurClients></OurClients>
         <Features></Features>
         <BeMarchant></BeMarchant>
+        <TestimonialsSwiper></TestimonialsSwiper>
     </div>
   )
 }

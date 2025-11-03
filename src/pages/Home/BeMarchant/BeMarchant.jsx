@@ -4,7 +4,7 @@ import image from '../../../assets/location-merchant.png'
 const BeMarchant = () => {
     return (
         <div>
-            <div className="bg-[url('assets/be-a-merchant-bg.png')] bg-no-repeat bg-secondary p-10 rounded-xl text-white my-14">
+            <div data-aos="zoom-in" className="bg-[url('assets/be-a-merchant-bg.png')] bg-no-repeat bg-secondary p-10 rounded-xl text-white my-14">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <img
                         src={image}
@@ -15,8 +15,8 @@ const BeMarchant = () => {
                         <p className="py-6">
                             We offer the lowest delivery charge with the highest value along with 100% safety of your product. Pathao courier delivers your parcels in every corner of Bangladesh right on time.
                         </p>
-                        <div className='flex gap-4'>
-                            <button className="btn btn-primary text-black rounded-full">Become a Merchant</button>
+                        <div className='md:flex gap-4'>
+                            <button className="btn btn-primary text-black rounded-full mb-4 md:mb-0 lg:mb-0">Become a Merchant</button>
                             <button className="btn bg-transparent borrder-2 border-primary text-white rounded-full">Earn with Profast Courier</button>
                         </div>
                     </div>
