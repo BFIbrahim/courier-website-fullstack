@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router'
+import { Link, NavLink } from 'react-router'
 import logo from '../../assets/brands/GoFast.png'
 
 const Navbar = () => {
@@ -39,7 +39,7 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end flex gap-3">
-                    <a className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign In</a>
+                    <Link to="login" className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign In</Link>
                     <a className="btn bg-primary border-2 border-primary hover:bg-transparent">Be a rider</a>
                 </div>
             </div>

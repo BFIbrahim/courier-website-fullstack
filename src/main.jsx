@@ -11,7 +11,7 @@ Aos.init()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <div className='font-urbanist bg-gray-200 py-5'>
+    <div className='font-urbanist bg-gray-200 min-h-screen py-5'>
       <RouterProvider router={router} />
     </div>
   </StrictMode>,
