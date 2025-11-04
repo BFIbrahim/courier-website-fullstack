@@ -33,7 +33,7 @@ const Testimonials = () => {
                 <p className="text-accent my-5">Enhance posture, mobility, and well-being effortlessly with Posture Pro. Achieve proper alignment, reduce pain, and strengthen your body with ease!</p>
             </div>
 
-            <div className="relative flex justify-center items-center py-10 w-full md:w-10/12 mx-auto px-4">
+            <div className="relative flex justify-center items-center py-10 w-full md:w-10/12 mx-auto px-4 overflow-x-hidden">
                 {navReady && (
                     <Swiper
                         modules={[Navigation, Pagination]}
@@ -50,10 +50,10 @@ const Testimonials = () => {
                         }}
                         className="w-full pb-10"
                         breakpoints={{
-                            0: { slidesPerView: 1 },       // Mobile
-                            640: { slidesPerView: 1 },     // Small screens
-                            768: { slidesPerView: 2 },     // Tablet
-                            1024: { slidesPerView: 3 },    // Desktop
+                            0: { slidesPerView: 1 },       
+                            640: { slidesPerView: 1 },     
+                            768: { slidesPerView: 2 },     
+                            1024: { slidesPerView: 3 },    
                         }}
                     >
                         {testimonials.map((item, index) => (
@@ -76,7 +76,6 @@ const Testimonials = () => {
                     </Swiper>
                 )}
 
-                {/* Custom Arrows */}
                 <button
                     ref={prevRef}
                     className="custom-prev absolute left-2 top-1/2 -translate-y-1/2 bg-white shadow-lg p-2 md:p-3 rounded-full hover:bg-primary hover:text-white transition z-10"
