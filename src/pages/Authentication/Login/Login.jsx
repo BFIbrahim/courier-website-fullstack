@@ -2,29 +2,47 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from "react-icons/fc";
 
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import useAuth from '../../../hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
-    const{signInWithGoogle} = useAuth()
+    const { signInWithGoogle, signInUser } = useAuth()
+
+    const navigate = useNavigate()
 
 
     const onSubmit = data => {
         console.log(data);
+        signInUser(data.email, data.password)
+            .then(result => {
+                console.log(result)
+                Swal.fire({
+                    title: "Login Successful",
+                    text: "Welcome back!",
+                    icon: "success",
+                    confirmButtonColor: "#CAEB66",
+                });
+                navigate("/")
+
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
 
 
     const hundleGoogleSIgnIn = () => {
         signInWithGoogle()
-        .then(result => {
-            console.log(result)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (

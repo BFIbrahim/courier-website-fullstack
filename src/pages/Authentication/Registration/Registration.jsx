@@ -2,20 +2,28 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from "react-icons/fc";
 
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import useAuth from '../../../hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Registration = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
     const { createUser, signInWithGoogle } = useAuth()
+    const navigate = useNavigate()
 
     const onSubmit = data => {
         console.log(data);
         createUser(data.email, data.password)
             .then(result => {
-                alert('Congrats your account created successfully')
                 console.log(result);
+                Swal.fire({
+                    title: "Registration Successful",
+                    text: "Welcome to GoFst",
+                    icon: "success",
+                    confirmButtonColor: "#CAEB66",
+                });
+                navigate("/")
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -27,12 +35,12 @@ const Registration = () => {
 
     const hundleGoogleSIgnIn = () => {
         signInWithGoogle()
-        .then(result => {
-            console.log(result)
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(result => {
+                console.log(result)
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     return (

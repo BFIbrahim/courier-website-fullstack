@@ -1,8 +1,22 @@
 import React from 'react'
 import { Link, NavLink } from 'react-router'
 import logo from '../../assets/brands/GoFast.png'
+import useAuth from '../../hooks/useAuth'
+import Swal from 'sweetalert2'
 
 const Navbar = () => {
+
+    const { user, logOut } = useAuth()
+
+    const hundleLogout = () => {
+        logOut()
+        Swal.fire({
+            title: "Signed Out",
+            text: "You will be logged out of your account.",
+            icon: "warning",
+            confirmButtonColor: "#CAEB66",
+        });
+    }
 
     const navItems = <>
         <li><NavLink to="/" end>Home</NavLink></li>
@@ -39,7 +53,9 @@ const Navbar = () => {
                     </ul>
                 </div>
                 <div className="navbar-end flex gap-3">
-                    <Link to="login" className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign In</Link>
+                    {
+                        user ? <Link onClick={hundleLogout} className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign Out</Link> : <Link to="login" className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign In</Link>
+                    }
                     <a className="btn bg-primary border-2 border-primary hover:bg-transparent">Be a rider</a>
                 </div>
             </div>
