@@ -3,13 +3,36 @@ import { useForm } from 'react-hook-form'
 import { FcGoogle } from "react-icons/fc";
 
 import { Link } from 'react-router'
+import useAuth from '../../../hooks/useAuth';
 
 const Registration = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
+    const { createUser, signInWithGoogle } = useAuth()
 
     const onSubmit = data => {
         console.log(data);
+        createUser(data.email, data.password)
+            .then(result => {
+                alert('Congrats your account created successfully')
+                console.log(result);
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                console.log(errorCode, errorMessage)
+            });
+
+    }
+
+    const hundleGoogleSIgnIn = () => {
+        signInWithGoogle()
+        .then(result => {
+            console.log(result)
+        })
+        .catch(error => {
+            console.log(error)
+        })
     }
 
     return (
@@ -67,7 +90,7 @@ const Registration = () => {
             </form>
             <p className='text-accent'>Alredy have an accout? <Link to="/login" className='text-secondary font-semibold'>Login</Link></p>
             <div className="divider my-8">OR</div>
-            <button className='btn w-full bg-gray-300'><FcGoogle></FcGoogle> Sign up with goolge</button>
+            <button onClick={hundleGoogleSIgnIn} className='btn w-full bg-gray-300'><FcGoogle></FcGoogle> Sign up with goolge</button>
         </div>
     )
 }

@@ -3,14 +3,30 @@ import { useForm } from 'react-hook-form'
 import { FcGoogle } from "react-icons/fc";
 
 import { Link } from 'react-router'
+import useAuth from '../../../hooks/useAuth';
 
 const Login = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
+    const{signInWithGoogle} = useAuth()
+
 
     const onSubmit = data => {
         console.log(data);
     }
+
+
+
+    const hundleGoogleSIgnIn = () => {
+        signInWithGoogle()
+        .then(result => {
+            console.log(result)
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
     return (
         <div>
             <div className='my-4'>
@@ -58,7 +74,7 @@ const Login = () => {
             </form>
             <p className='text-accent'>Don't have any accout? <Link to="/register" className='text-secondary font-semibold'>Register</Link></p>
             <div className="divider my-8">OR</div>
-            <button className='btn w-full bg-gray-300'><FcGoogle></FcGoogle> Login with goolge</button>
+            <button onClick={hundleGoogleSIgnIn} className='btn w-full bg-gray-300'><FcGoogle></FcGoogle> Login with goolge</button>
         </div>
     )
 }
