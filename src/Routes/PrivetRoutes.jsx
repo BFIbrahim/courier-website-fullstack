@@ -14,7 +14,7 @@ const PrivetRoutes = ({ children }) => {
     }
 
 
-    return { children }
+    return children 
 };
 
 export default PrivetRoutes;
