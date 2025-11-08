@@ -1,8 +1,9 @@
-import React, {useMemo, useEffect } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useLoaderData } from "react-router";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
-import useAuth from "../../hooks/useAuth"; 
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 const calculateDeliveryCharge = (isDocument, weight, isWithinCity) => {
@@ -19,7 +20,7 @@ const calculateDeliveryCharge = (isDocument, weight, isWithinCity) => {
 
     if (parcelWeight > 3) {
       const excessWeight = parcelWeight - 3;
-      additionalCharge = Math.ceil(excessWeight) * 40; 
+      additionalCharge = Math.ceil(excessWeight) * 40;
     }
     totalCharge = baseRate + additionalCharge;
   }
@@ -44,15 +45,17 @@ const processWarehouseData = (data) => {
 };
 
 const generateTrackingId = () => {
-    return 'TRK-' + Math.random().toString(36).substring(2, 12).toUpperCase();
+  return 'TRK-' + Math.random().toString(36).substring(2, 12).toUpperCase();
 };
 
 
 const AddParcel = () => {
   const allWarehouses = useLoaderData();
-  
+
   const { user } = useAuth();
-  const userEmail = user?.email || "unknown@example.com"; 
+  const userEmail = user?.email || "unknown@example.com";
+
+  const axiosSecure = useAxiosSecure()
 
   const processedData = useMemo(() => processWarehouseData(allWarehouses), [allWarehouses]);
   const regionNames = Object.keys(processedData);
@@ -61,7 +64,7 @@ const AddParcel = () => {
     defaultValues: {
       senderWarehouse: regionNames[0] || "",
       receiverWarehouse: regionNames[0] || "",
-      isDocument: "true", 
+      isDocument: "true",
       parcelWeight: "",
     }
   });
@@ -72,7 +75,7 @@ const AddParcel = () => {
   const senderWarehouseWatch = watch('senderWarehouse');
   const receiverWarehouseWatch = watch('receiverWarehouse');
 
-  const isDocument = isDocumentWatch === "true"; 
+  const isDocument = isDocumentWatch === "true";
   const senderWarehouse = senderWarehouseWatch;
   const receiverWarehouse = receiverWarehouseWatch;
 
@@ -93,9 +96,9 @@ const AddParcel = () => {
 
   const onSubmit = (data) => {
     const isWithinCity = data.senderDistrict === data.receiverDistrict;
-    
+
     const chargeDetails = calculateDeliveryCharge(
-      data.isDocument === "true", 
+      data.isDocument === "true",
       data.parcelWeight,
       isWithinCity
     );
@@ -104,80 +107,89 @@ const AddParcel = () => {
     const deliveryZone = chargeDetails.deliveryZone;
 
     const confirmBooking = () => {
-      toast.dismiss(confirmationToastId); 
-      
+      toast.dismiss(confirmationToastId);
+
       const trackingId = generateTrackingId();
-      const addedAt = new Date().toISOString(); 
-      
+      const addedAt = new Date().toISOString();
+
       const finalParcelData = {
         ...data,
         isDocument: data.isDocument === "true",
         parcelWeight: Number(data.parcelWeight),
-        userEmail: userEmail, 
-        trackingId: trackingId, 
-        deliveryCharge: finalCharge, 
-        deliveryZone: deliveryZone, 
+        userEmail: userEmail,
+        trackingId: trackingId,
+        deliveryCharge: finalCharge,
+        deliveryZone: deliveryZone,
         baseCharge: chargeDetails.baseCharge,
         additionalCharge: chargeDetails.additionalCharge,
-        addedAt: addedAt, 
-        status: "Pending Pickup", 
+        addedAt: addedAt,
+        status: "Pending Pickup",
       };
 
       console.log("Final Parcel Data to Save (Ready for API):", finalParcelData);
 
-      toast.success(`Parcel Added Successfully! Tracking ID: ${trackingId}`, { 
-        duration: 5000 
-      });
+      axiosSecure.post('/parcels', finalParcelData)
+        .then(res => {
+          console.log(res.data)
+          if (res.data.insertedId) {
+            toast.success(`Parcel Added Successfully! Tracking ID: ${trackingId}`, {
+              duration: 5000
+            });
+          }
+        })
+        .catch(err => {
+          console.error(err)
+        })
     };
-    
+
     const backToEdit = (tId) => {
-        toast.dismiss(tId);
+      toast.dismiss(tId);
     };
 
     const confirmationToastId = toast((t) => (
       <div className="text-center p-4 w-80">
         <h3 className="text-xl font-bold mb-3 text-secondary">Confirm Parcel Details </h3>
         <div className="text-left mb-4 space-y-1">
-            <p><span className="font-semibold">Parcel Type:</span> {parcelType}</p>
-            <p><span className="font-semibold">Delivery Zone:</span> {deliveryZone}</p>
-            <p><span className="font-semibold">Weight:</span> {data.parcelWeight} KG</p>
-            <hr className="my-1 border-gray-300"/>
-            <p><span className="font-semibold">Base Charge:</span> ৳{chargeDetails.baseCharge}</p>
-            <p><span className="font-semibold">Extra Charge:</span> ৳{chargeDetails.additionalCharge}</p>
-            <hr className="my-1 border-gray-300"/>
+          <p><span className="font-semibold">Parcel Type:</span> {parcelType}</p>
+          <p><span className="font-semibold">Delivery Zone:</span> {deliveryZone}</p>
+          <p><span className="font-semibold">Weight:</span> {data.parcelWeight} KG</p>
+          <hr className="my-1 border-gray-300" />
+          <p><span className="font-semibold">Base Charge:</span> ৳{chargeDetails.baseCharge}</p>
+          <p><span className="font-semibold">Extra Charge:</span> ৳{chargeDetails.additionalCharge}</p>
+          <hr className="my-1 border-gray-300" />
         </div>
-        
+
         <p className="mb-4 text-xl font-extrabold text-lime-600">
-            Total Charge: ৳{finalCharge}
+          Total Charge: ৳{finalCharge}
         </p>
-        
+
         <div className="flex justify-center flex-col space-y-2">
-            <button 
-                onClick={confirmBooking} 
-                className="btn btn-sm btn-success text-white bg-lime-600 hover:bg-lime-700 border-none"
-            >
-                Proceed to Add Parcel
-            </button>
-            <button 
-                onClick={() => backToEdit(t.id)} 
-                className="btn btn-sm btn-ghost text-gray-600 border-none hover:bg-gray-200"
-            >
-                Back to Edit
-            </button>
+          <button
+            onClick={confirmBooking}
+            className="btn btn-sm btn-success text-white bg-lime-600 hover:bg-lime-700 border-none"
+          >
+            Proceed to Add Parcel
+          </button>
+          <button
+            onClick={() => backToEdit(t.id)}
+            className="btn btn-sm btn-ghost text-gray-600 border-none hover:bg-gray-200"
+          >
+            Back to Edit
+          </button>
         </div>
       </div>
     ), {
-      duration: Infinity, 
+      duration: Infinity,
       style: {
-        background: '#fff', 
+        background: '#fff',
         color: '#000',
         padding: '0.5rem',
-        border: '2px solid #CAEB66', 
+        border: '2px solid #CAEB66',
         maxWidth: '400px',
       }
     });
   };
-  
+
   return (
     <>
       <div className="min-h-scree flex justify-center items-center p-6">
@@ -262,7 +274,7 @@ const AddParcel = () => {
                     className={`select select-bordered w-full ${errors.senderWarehouse ? 'select-error' : ''}`}
                     {...register("senderWarehouse", { required: "Sender Region is required" })}
                     onChange={(e) => {
-                      setValue("senderWarehouse", e.target.value); 
+                      setValue("senderWarehouse", e.target.value);
                       setValue("senderDistrict", "");
                     }}
                   >
@@ -276,7 +288,7 @@ const AddParcel = () => {
                     ))}
                   </select>
                   {errors.senderWarehouse && <p className="text-red-500 text-sm">{errors.senderWarehouse.message}</p>}
-                  
+
                   <input
                     type="text"
                     placeholder="Address"
@@ -306,7 +318,7 @@ const AddParcel = () => {
                     </select>
                     {errors.senderDistrict && <p className="text-red-500 text-sm">{errors.senderDistrict.message}</p>}
                   </div>
-                  
+
                   <textarea
                     className="textarea textarea-bordered md:col-span-2 w-full"
                     placeholder="Pickup Instruction"
@@ -401,13 +413,13 @@ const AddParcel = () => {
           </form>
         </div>
       </div>
-      
+
       <Toaster
         position="top-center"
         toastOptions={{
           style: {
-            background: "#CAEB66", 
-            color: "#000000", 
+            background: "#CAEB66",
+            color: "#000000",
             borderRadius: "0.5rem",
             padding: "0.5rem 1rem",
             boxShadow: "0 4px 6px rgba(0,0,0,0.1)"
