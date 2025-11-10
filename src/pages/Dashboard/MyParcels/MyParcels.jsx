@@ -2,13 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import Swal from 'sweetalert2';
 
 const MyParcels = () => {
 
     const user = useAuth()
     const axiosSecure = useAxiosSecure()
 
-    const { data: parcels = [] } = useQuery({
+    const { data: parcels = [], refetch } = useQuery({
         queryKey: ['my-parcels', user.email],
         queryFn: async () => {
             const res = await axiosSecure.get(`/parcels?email=${user.email}`)
@@ -16,7 +17,58 @@ const MyParcels = () => {
         }
     })
 
-    console.log(parcels)
+
+    const handleDelete = async (id) => {
+        try {
+            // 1️⃣ Confirm delete
+            const result = await Swal.fire({
+                title: "Are you sure?",
+                text: "This parcel will be permanently deleted.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true,
+            });
+
+            // 2️⃣ If confirmed
+            if (result.isConfirmed) {
+                const res = await axiosSecure.delete(`/parcels/${id}`);
+
+                if (res.data.deletedCount > 0) {
+                    // 3️⃣ Show success message
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Deleted parcel successfully.",
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+
+                } else {
+                    Swal.fire({
+                        title: "Not Found",
+                        text: "No parcel was deleted. It may not exist.",
+                        icon: "info",
+                        timer: 2000,
+                        showConfirmButton: false,
+                    });
+                }
+
+                refetch()
+            }
+        } catch (error) {
+            // 4️⃣ Handle any errors
+            console.error("Delete error:", error);
+            Swal.fire({
+                title: "Error!",
+                text: "Something went wrong while deleting the parcel.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+
 
     return (
         <div>
@@ -59,7 +111,7 @@ const MyParcels = () => {
                                     <td className='flex gap-2 items-center justify-center'>
                                         <button className='btn bg-primary'>view</button>
                                         <button className='btn bg-yellow-400'>Edit</button>
-                                        <button className='btn bg-red-400'>Delte</button>
+                                        <button onClick={() => handleDelete(parcel._id)} className='btn bg-red-400'>Delte</button>
                                     </td>
                                 </tr>
                             ))
