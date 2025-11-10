@@ -7,6 +7,8 @@ import Registration from "../pages/Authentication/Registration/Registration";
 import Covarage from "../pages/Covarage/Covarage";
 import PrivetRoutes from "../Routes/PrivetRoutes";
 import AddParcel from "../pages/AddParcel/AddParcel";
+import DashboardLayout from "../Layouts/DashboardLayout";
+import MyParcels from "../pages/Dashboard/MyParcels/MyParcels";
 
 
 export const router = createBrowserRouter([
@@ -42,6 +44,16 @@ export const router = createBrowserRouter([
       {
         path: 'register',
         Component: Registration
+      }
+    ]
+  },
+  {
+    path: "/dashboard",
+    element: <PrivetRoutes><DashboardLayout></DashboardLayout></PrivetRoutes>,
+    children: [
+      {
+        path: 'myparcels',
+        Component: MyParcels
       }
     ]
   }
