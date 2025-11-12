@@ -3,11 +3,14 @@ import React from 'react';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
+import { Link, useNavigate } from 'react-router';
 
 const MyParcels = () => {
 
     const user = useAuth()
     const axiosSecure = useAxiosSecure()
+    const navigate = useNavigate()
+
 
     const { data: parcels = [], refetch } = useQuery({
         queryKey: ['my-parcels', user.email],
@@ -17,10 +20,12 @@ const MyParcels = () => {
         }
     })
 
+    console.log(parcels)
+
 
     const handleDelete = async (id) => {
         try {
-            // 1️⃣ Confirm delete
+            
             const result = await Swal.fire({
                 title: "Are you sure?",
                 text: "This parcel will be permanently deleted.",
@@ -31,12 +36,12 @@ const MyParcels = () => {
                 reverseButtons: true,
             });
 
-            // 2️⃣ If confirmed
+            
             if (result.isConfirmed) {
                 const res = await axiosSecure.delete(`/parcels/${id}`);
 
                 if (res.data.deletedCount > 0) {
-                    // 3️⃣ Show success message
+                    
                     Swal.fire({
                         title: "Deleted!",
                         text: "Deleted parcel successfully.",
@@ -45,38 +50,31 @@ const MyParcels = () => {
                         showConfirmButton: false,
                     });
 
-                } else {
-                    Swal.fire({
-                        title: "Not Found",
-                        text: "No parcel was deleted. It may not exist.",
-                        icon: "info",
-                        timer: 2000,
-                        showConfirmButton: false,
-                    });
                 }
 
                 refetch()
             }
         } catch (error) {
-            // 4️⃣ Handle any errors
             console.error("Delete error:", error);
-            Swal.fire({
-                title: "Error!",
-                text: "Something went wrong while deleting the parcel.",
-                icon: "error",
-                confirmButtonText: "OK",
-            });
         }
     };
 
 
+    const hundlePay = (id) => {
+        console.log(id)
+        navigate(`/dashboard/payment/${id}`)
+    }
+
     return (
         <div>
-            <h1 className='text-2xl font-bold text-secondary mb-4 pt-4 border-b-2 border-primary'>Total Parcels: {parcels.length}</h1>
+            <div className='border-b-2 border-primary mb-4 pt-4 pb-3 flex justify-around'>
+                <h1 className='text-2xl font-bold text-secondary  '>Total Parcels: {parcels.length}</h1>
+                
+            </div>
 
             <div className="overflow-x-auto">
                 <table className="table table-zebra">
-                    {/* head */}
+                    
                     <thead className='text-center'>
                         <tr>
                             <th></th>
@@ -110,8 +108,16 @@ const MyParcels = () => {
                                     <td>{parcel.additionalCharge + parcel.baseCharge + parcel.deliveryCharge}</td>
                                     <td className='flex gap-2 items-center justify-center'>
                                         <button className='btn bg-primary'>view</button>
-                                        <button className='btn bg-yellow-400'>Edit</button>
-                                        <button onClick={() => handleDelete(parcel._id)} className='btn bg-red-400'>Delte</button>
+                                        {
+                                            parcel.paymentStatus === 'paid' ?
+                                            
+                                            <button onClick={() => hundlePay(parcel._id)} className='btn btn-disabled'>Payed</button> 
+                                            : 
+                                            <button onClick={() => hundlePay(parcel._id)} className='btn bg-yellow-400'>Pay</button> 
+                                        }
+                                    
+
+                                        <button onClick={() => handleDelete(parcel._id)} className='btn bg-red-400'>Delete</button>
                                     </td>
                                 </tr>
                             ))

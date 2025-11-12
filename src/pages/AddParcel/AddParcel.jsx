@@ -1,12 +1,15 @@
 import React, { useMemo, useEffect } from "react";
-import { useLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate,  } from "react-router";
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 
 const calculateDeliveryCharge = (isDocument, weight, isWithinCity) => {
+
+
   const parcelWeight = Number(weight) || 0;
   let baseRate = 0;
   let additionalCharge = 0;
@@ -124,6 +127,7 @@ const AddParcel = () => {
         additionalCharge: chargeDetails.additionalCharge,
         addedAt: addedAt,
         status: "Pending Pickup",
+        paymentStatus: 'unpaid'
       };
 
       console.log("Final Parcel Data to Save (Ready for API):", finalParcelData);
@@ -132,8 +136,19 @@ const AddParcel = () => {
         .then(res => {
           console.log(res.data)
           if (res.data.insertedId) {
-            toast.success(`Parcel Added Successfully! Tracking ID: ${trackingId}`, {
-              duration: 5000
+            Swal.fire({
+              icon: 'success',
+              title: 'Parcel Added',
+              html: `<p>Tracking Id: <b>${trackingId}</b></p>`,
+              showCancelButton: true,
+              confirmButtonText: 'Go to parcel page',
+              cancelButtonText: 'Close',
+              confirmButtonColor: '#CAEB66',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                
+                navigate('/dashboard/myparcels');
+              }
             });
           }
         })
@@ -189,6 +204,8 @@ const AddParcel = () => {
       }
     });
   };
+
+  const navigate = useNavigate()
 
   return (
     <>

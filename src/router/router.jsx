@@ -9,6 +9,7 @@ import PrivetRoutes from "../Routes/PrivetRoutes";
 import AddParcel from "../pages/AddParcel/AddParcel";
 import DashboardLayout from "../Layouts/DashboardLayout";
 import MyParcels from "../pages/Dashboard/MyParcels/MyParcels";
+import Payment from "../pages/Dashboard/Payment/Payment";
 
 
 export const router = createBrowserRouter([
@@ -53,7 +54,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: 'myparcels',
-        Component: MyParcels
+        Component: MyParcels,
+      },
+      {
+        path: 'payment/:id',
+        Component: Payment
       }
     ]
   }
