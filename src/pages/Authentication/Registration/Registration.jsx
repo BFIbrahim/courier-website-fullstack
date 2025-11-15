@@ -1,22 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { FcGoogle } from "react-icons/fc";
+import { FaUserCircle } from "react-icons/fa";
+
 
 import { Link, useNavigate } from 'react-router'
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 
 const Registration = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm()
-    const { createUser, signInWithGoogle } = useAuth()
+    const { createUser, signInWithGoogle, updateUserProfile } = useAuth()
     const navigate = useNavigate()
+    const [profilePic, setProfilePic] = useState('')
 
     const onSubmit = data => {
         console.log(data);
         createUser(data.email, data.password)
             .then(result => {
                 console.log(result);
+
+                const userProfileInfo = {
+                    displayName: data.name,
+                    photoURL: profilePic,
+                }
+
+                updateUserProfile(userProfileInfo)
+                    .then(() => {
+                        console.log('Profile Picture updated')
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+
                 Swal.fire({
                     title: "Registration Successful",
                     text: "Welcome to GoFst",
@@ -43,6 +61,23 @@ const Registration = () => {
             })
     }
 
+    const hundleImageUpload = async (e) => {
+        const userImage = e.target.files[0]
+
+        const formData = new FormData()
+        formData.append('image', userImage)
+
+        const imageUploadUrl = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`
+
+        const res = await axios.post(imageUploadUrl, formData)
+
+        setProfilePic(res.data.data.url)
+        console.log(res.data)
+
+    }
+
+
+
     return (
         <div>
             <div className='my-4'>
@@ -51,6 +86,35 @@ const Registration = () => {
             </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className="fieldset">
+                    <div className="flex flex-col my-4">
+                        <label
+                            htmlFor="profileImage"
+                            className="w-16 h-16 rounded-full border-2 border-gray-300 bg-gray-100 hover:bg-gray-200 cursor-pointer flex items-center justify-center overflow-hidden transition"
+                        >
+                            {profilePic ? (
+                                <img
+                                    src={profilePic}
+                                    alt="preview"
+                                    className="w-full h-full object-cover"
+                                />
+                            ) : (
+                                <FaUserCircle className="text-6xl text-gray-400" />
+                            )}
+                        </label>
+
+
+                        <input
+                            id="profileImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={hundleImageUpload}
+                            className="hidden"
+                            name='image'
+                        />
+
+                        <p className="text-sm text-gray-500 mt-2">Upload your profile photo</p>
+                    </div>
+
                     <label className="label text-secondary">Name</label>
                     <input type="text" {...register('Name', {
                         required: true

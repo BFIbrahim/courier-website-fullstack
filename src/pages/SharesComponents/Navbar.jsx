@@ -62,6 +62,9 @@ const Navbar = () => {
                         user ? <Link onClick={hundleLogout} className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign Out</Link> : <Link to="login" className="btn bg-transparent border-primary border-2 hover:bg-primary">Sign In</Link>
                     }
                     <a className="btn bg-primary border-2 border-primary hover:bg-transparent">Be a rider</a>
+
+                    {user && <img className='w-10 h-10 rounded-full' src={user.photoURL} alt="" />}
+
                 </div>
             </div>
         </div>

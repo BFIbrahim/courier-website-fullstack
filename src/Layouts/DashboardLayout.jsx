@@ -2,7 +2,8 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import logo from '../assets/brands/GoFast.png'
 import { TiHome } from "react-icons/ti";
-import { FaBoxOpen } from "react-icons/fa";
+import { FaBoxOpen, FaShippingFast, FaUserEdit, FaMoneyCheckAlt } from "react-icons/fa";
+
 
 
 
@@ -45,6 +46,9 @@ const DashboardLayout = () => {
                         <img className='w-32 mb-3' src={logo} alt="" /><hr  className='text-primary'/>
                         <li className='mt-2'><NavLink to='/'><TiHome className='text-xl'/> Home</NavLink></li>
                         <li><NavLink to='/dashboard/myparcels'><FaBoxOpen className='text-xl'/> My Parcels</NavLink></li>
+                        <li><NavLink to='/dashboard/paymenthistory'><FaMoneyCheckAlt className='text-xl'/> Payment History</NavLink></li>
+                        <li><NavLink to='/dashboard/track'><FaShippingFast className='text-xl'/> Track your parcel</NavLink></li>
+                        <li><NavLink to='/dashboard/updateprofile'><FaUserEdit className='text-xl'/> Update profile</NavLink></li>
                     </ul>
                 </div>
             </div>
