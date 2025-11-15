@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router'
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import useAxios from '../../../hooks/useAxios';
 
 const Registration = () => {
 
@@ -15,12 +16,23 @@ const Registration = () => {
     const { createUser, signInWithGoogle, updateUserProfile } = useAuth()
     const navigate = useNavigate()
     const [profilePic, setProfilePic] = useState('')
+    const axiosInstance = useAxios()
 
     const onSubmit = data => {
-        console.log(data);
         createUser(data.email, data.password)
-            .then(result => {
+            .then(async (result) => {
                 console.log(result);
+
+                const userInfo = {
+                    email: data.email,
+                    role: 'user',
+                    createdAt: new Date().toTimeString(),
+                    lastLogin: new Date().toTimeString()
+                }
+
+                const userRes = await axiosInstance.post('/users', userInfo)
+                console.log(userRes.data)
+
 
                 const userProfileInfo = {
                     displayName: data.name,
@@ -53,8 +65,20 @@ const Registration = () => {
 
     const hundleGoogleSIgnIn = () => {
         signInWithGoogle()
-            .then(result => {
+            .then(async(result) => {
                 console.log(result)
+
+                const user = result.user
+
+                const userInfo = {
+                    email: user.email,
+                    role: 'user',
+                    createdAt: new Date().toTimeString(),
+                    lastLogin: new Date().toTimeString()
+                }
+
+                const res = await axiosInstance.post('/users', userInfo)
+                console.log(res)
             })
             .catch(error => {
                 console.log(error)

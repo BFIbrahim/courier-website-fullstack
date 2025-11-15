@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { Link, useLocation, useNavigate } from 'react-router'
 import useAuth from '../../../hooks/useAuth';
 import Swal from 'sweetalert2';
+import useAxios from '../../../hooks/useAxios';
 
 const Login = () => {
 
@@ -12,11 +13,10 @@ const Login = () => {
     const { signInWithGoogle, signInUser } = useAuth()
 
     const navigate = useNavigate()
-    
+
     const location = useLocation()
-    console.log(location)
     const from = location.state?.from || '/'
-    console.log(from)
+    const axiosInstance = useAxios()
 
 
 
@@ -44,8 +44,18 @@ const Login = () => {
 
     const hundleGoogleSIgnIn = () => {
         signInWithGoogle()
-            .then(result => {
-                console.log(result)
+            .then(async(result) => {
+                const user = result.user
+
+                const userInfo = {
+                    email: user.email,
+                    role: 'user',
+                    createdAt: new Date().toTimeString(),
+                    lastLogin: new Date().toTimeString()
+                }
+
+                const res = await axiosInstance.post('/users', userInfo)
+                console.log(res)
             })
             .catch(error => {
                 console.log(error)
