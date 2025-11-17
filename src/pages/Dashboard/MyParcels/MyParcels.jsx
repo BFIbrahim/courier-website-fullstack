@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router';
 
 const MyParcels = () => {
 
-    const user = useAuth()
+    const {user} = useAuth()
     const axiosSecure = useAxiosSecure()
     const navigate = useNavigate()
 

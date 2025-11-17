@@ -26,6 +26,8 @@ const PaymentHistory = () => {
     enabled: !!user?.email,
   })
 
+  console.log(payments)
+
   if (isLoading) {
     return (
       <div className="text-center py-10 text-accent">Loading payment history...</div>

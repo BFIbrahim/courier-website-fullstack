@@ -13,6 +13,8 @@ import Payment from "../pages/Dashboard/Payment/Payment";
 import PaymentHistory from "../pages/Dashboard/PaymentHistory/PaymentHistory";
 import TrackParcel from "../pages/Dashboard/TrackParcel/TrackParcel";
 import BeARider from "../pages/Dashboard/BeARider/BeARider";
+import PendingRiders from "../pages/Dashboard/PendingRiders/PendingRiders";
+import ApprovedRiders from "../pages/Dashboard/ApprovedRiders/ApprovedRiders";
 
 
 export const router = createBrowserRouter([
@@ -74,6 +76,14 @@ export const router = createBrowserRouter([
       {
         path: 'bearider',
         Component: BeARider
+      },
+      {
+        path: 'pending-riders',
+        Component: PendingRiders
+      },
+      {
+        path: 'active-riders',
+        Component: ApprovedRiders
       }
     ]
   }

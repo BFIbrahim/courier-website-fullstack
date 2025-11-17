@@ -2,8 +2,10 @@ import React from 'react';
 import { NavLink, Outlet } from 'react-router';
 import logo from '../assets/brands/GoFast.png'
 import { TiHome } from "react-icons/ti";
-import { FaBoxOpen, FaShippingFast, FaUserEdit, FaMoneyCheckAlt } from "react-icons/fa";
+import { FaBoxOpen, FaShippingFast, FaUserEdit, FaMoneyCheckAlt, FaMotorcycle } from "react-icons/fa";
 import { TbMotorbike } from "react-icons/tb";
+import { FaUserClock } from "react-icons/fa";  
+
 
 
 
@@ -50,7 +52,10 @@ const DashboardLayout = () => {
                         <li><NavLink to='/dashboard/paymenthistory'><FaMoneyCheckAlt className='text-xl'/> Payment History</NavLink></li>
                         <li><NavLink to='/dashboard/track'><FaShippingFast className='text-xl'/> Track your parcel</NavLink></li>
                         <li><NavLink to='/dashboard/bearider'><TbMotorbike className='text-xl'/> Be a rider</NavLink></li>
+                        <li><NavLink to='/dashboard/pending-riders'><FaUserClock className='text-xl'/> Pending Riders</NavLink></li>
+                        <li><NavLink to='/dashboard/active-riders'><FaMotorcycle className='text-xl'/> Active Riders</NavLink></li>
                         <li><NavLink to='/dashboard/updateprofile'><FaUserEdit className='text-xl'/> Update profile</NavLink></li>
+                        
                     </ul>
                 </div>
             </div>
