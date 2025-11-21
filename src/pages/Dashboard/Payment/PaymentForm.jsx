@@ -29,7 +29,7 @@ const PaymentForm = () => {
 
 
     const { _id } = parcelInfo
-    const totalAmount = parcelInfo.additionalCharge + parcelInfo.baseCharge + parcelInfo.deliveryCharge
+    const totalAmount =  parcelInfo.deliveryCharge
 
     const amountInCents = totalAmount * 100;
 

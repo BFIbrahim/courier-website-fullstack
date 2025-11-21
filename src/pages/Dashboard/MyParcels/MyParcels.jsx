@@ -105,7 +105,7 @@ const MyParcels = () => {
                                             })
                                             : "N/A"}
                                     </td>
-                                    <td>{parcel.additionalCharge + parcel.baseCharge + parcel.deliveryCharge}</td>
+                                    <td>{parcel.deliveryCharge}</td>
                                     <td className='flex gap-2 items-center justify-center'>
                                         <button className='btn bg-primary'>view</button>
                                         {

@@ -18,6 +18,9 @@ import ApprovedRiders from "../pages/Dashboard/ApprovedRiders/ApprovedRiders";
 import MakeAdmin from "../pages/Dashboard/MakeAdmin/MakeAdmin";
 import Forbidden from "../pages/Forbidden/FOrbidden";
 import AdminRoute from "../Routes/AdminRoute";
+import AssignRider from "../pages/Dashboard/AssignRiders/AssignRiders";
+import PickupRequest from "../pages/Dashboard/PickUpRequest/PickupRequest";
+import RiderRoutes from "../Routes/RiderRoutes";
 
 
 export const router = createBrowserRouter([
@@ -84,6 +87,14 @@ export const router = createBrowserRouter([
         path: 'bearider',
         Component: BeARider
       },
+      // Riders Route
+      {
+        path: 'pickupRequest',
+        element: <RiderRoutes><PickupRequest></PickupRequest></RiderRoutes>
+      },
+
+
+      // Admin Routes
       {
         path: 'pending-riders',
         element: <AdminRoute><PendingRiders></PendingRiders></AdminRoute>
@@ -95,7 +106,11 @@ export const router = createBrowserRouter([
       {
         path: 'makeadmin',
         element: <AdminRoute><MakeAdmin></MakeAdmin></AdminRoute>
-      }
+      },
+      {
+        path:'assign-rider',
+        element: <AdminRoute><AssignRider></AssignRider></AdminRoute>
+      },
     ]
   }
 ]);

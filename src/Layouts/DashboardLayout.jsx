@@ -6,6 +6,9 @@ import { FaBoxOpen, FaShippingFast, FaUserEdit, FaMoneyCheckAlt, FaMotorcycle, F
 import { TbMotorbike } from "react-icons/tb";
 import { FaUserClock } from "react-icons/fa";
 import useUserRole from '../hooks/useUserRole';
+import { MdDeliveryDining } from "react-icons/md";
+import { MdLocalShipping } from "react-icons/md";
+
 
 const DashboardLayout = () => {
 
@@ -52,8 +55,14 @@ const DashboardLayout = () => {
                         <li><NavLink to='/dashboard/paymenthistory'><FaMoneyCheckAlt className='text-xl' /> Payment History</NavLink></li>
                         <li><NavLink to='/dashboard/track'><FaShippingFast className='text-xl' /> Track your parcel</NavLink></li>
                         <li><NavLink to='/dashboard/bearider'><TbMotorbike className='text-xl' /> Be a rider</NavLink></li>
-                        { !isLoading && role === 'admin' &&
+
+                        {!isLoading && role === 'rider' && <>
+                            <li><NavLink to='/dashboard/pickupRequest'><MdLocalShipping className='text-xl' /> Pickup requests</NavLink></li>
+                        </>}
+
+                        {!isLoading && role === 'admin' &&
                             <>
+                                <li><NavLink to='/dashboard/assign-rider'><MdDeliveryDining className='text-xl' /> Assign Rider</NavLink></li>
                                 <li><NavLink to='/dashboard/pending-riders'><FaUserClock className='text-xl' /> Pending Riders</NavLink></li>
                                 <li><NavLink to='/dashboard/active-riders'><FaMotorcycle className='text-xl' /> Active Riders</NavLink></li>
                                 <li><NavLink to='/dashboard/makeadmin'><FaUserShield className='text-xl' />Make Admin</NavLink></li>
