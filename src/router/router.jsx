@@ -21,6 +21,8 @@ import AdminRoute from "../Routes/AdminRoute";
 import AssignRider from "../pages/Dashboard/AssignRiders/AssignRiders";
 import PickupRequest from "../pages/Dashboard/PickUpRequest/PickupRequest";
 import RiderRoutes from "../Routes/RiderRoutes";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import ComingSoon from "../pages/CommingSoon/CommingSoon";
 
 
 export const router = createBrowserRouter([
@@ -42,6 +44,10 @@ export const router = createBrowserRouter([
           path:'addparcel',
           element: <PrivetRoutes><AddParcel></AddParcel></PrivetRoutes>,
           loader:() => fetch('warehouse.json')
+        },
+        {
+          path:'about-us',
+          Component: AboutUs
         }
     ]
   },
@@ -111,6 +117,10 @@ export const router = createBrowserRouter([
         path:'assign-rider',
         element: <AdminRoute><AssignRider></AssignRider></AdminRoute>
       },
+      {
+        path: 'comming-soon',
+        Component: ComingSoon
+      }
     ]
   }
 ]);
